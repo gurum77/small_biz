@@ -14,9 +14,13 @@ class TableInputPage extends StatefulWidget {
 }
 
 class _TableInputPageState extends State<TableInputPage> {
+  var dts = DTS();
+  ReceiptDataHelper receiptDataHelper = ReceiptDataHelper();
+  List<DataColumn> columns = new List<DataColumn>();
+  int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
+
   _TableInputPageState() {
     InitColumns();
-    InitRows();
   }
 
   void InitColumns() {
@@ -27,43 +31,53 @@ class _TableInputPageState extends State<TableInputPage> {
     });
   }
 
-  void InitRows() {
-    for (int i = 0; i < 100; ++i) datas.add(new ReceiptData());
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Table Input',
+        home: Scaffold(
+            body: SafeArea(
+                child: SingleChildScrollView(
+          child: PaginatedDataTable(
+            header: Text('Data table hffeader'),
+            columns: columns,
+            source: dts,
+            onRowsPerPageChanged: (r) {
+              setState(() {
+                _rowPerPage = r;
+              });
+            },
+            rowsPerPage: _rowPerPage,
+          ),
+        ))));
+  }
+}
 
-    for (int i = 0; i < datas.length; ++i) {
-      AddDataRowByData(rows, datas[i]);
-    }
+class DTS extends DataTableSource {
+  List<ReceiptData> datas = new List<ReceiptData>();
+  DTS() {
+    datas.clear();
+    for (int i = 0; i < 105; ++i) datas.add(new ReceiptData());
   }
 
-  ReceiptDataHelper receiptDataHelper = ReceiptDataHelper();
-  List<ReceiptData> datas = new List<ReceiptData>();
-  List<DataRow> rows = new List<DataRow>();
-  List<DataColumn> columns = new List<DataColumn>();
-
-  void AddDataRowByData(List<DataRow> rows, ReceiptData data) {
+  @override
+  DataRow getRow(int index) {
+    ReceiptData data = datas[index];
     List<DataCell> cells = new List<DataCell>();
     ReceiptDataType.values.forEach((element) {
       if (element == ReceiptDataType.count) return;
       cells.add(DataCell(Text(data.getValue(element).toString())));
     });
 
-    rows.add(new DataRow(cells: cells));
+    return DataRow.byIndex(index: index, cells: cells);
   }
-
-  //  void AddDataRow(List<DataRow> rows, ReceiptData data) {
-  //   if (!receiptDataHelper.isVisible(type)) return;
-
-  //   rows.add(new DataRow(cells: [
-  //     DataCell(Text(receiptDataHelper.getTitle(type))),
-  //     DataCell(Text(receiptData.getValue(type).toString()))
-  //   ]));
-  // }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Table Input',
-        home:
-            Scaffold(body: DataTable(columns: this.columns, rows: this.rows)));
-  }
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => datas.length;
+
+  @override
+  int get selectedRowCount => 0;
 }

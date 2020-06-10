@@ -86,18 +86,23 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
                 // BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Add')),
               ]),
           body: Container(
-              // decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //         image: AssetImage('images/sample_receipt.jpg'),
-              //         fit: BoxFit.cover)),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/sample_receipt.jpg'),
+                      fit: BoxFit.cover)),
               child: Column(
-            children: <Widget>[
-              DataTable(columns: [
-                DataColumn(label: Text('Title')),
-                DataColumn(label: Text('Value'), numeric: true)
-              ], rows: this.rows),
-            ],
-          )),
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(50),
+                    padding: EdgeInsets.all(30),
+                    color: Color.fromARGB(200, 255, 255, 255),
+                    child: DataTable(columns: [
+                      DataColumn(label: Text('Title')),
+                      DataColumn(label: Text('Value'), numeric: true)
+                    ], rows: this.rows),
+                  )
+                ],
+              )),
           // floatingActionButton: FloatingActionButton(
           //   onPressed: null,
           //   child: Icon(Icons.add),

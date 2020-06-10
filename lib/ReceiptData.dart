@@ -104,7 +104,7 @@ class ReceiptData {
     this.gross = 10.0;
     this.net = 1;
     this.total = 2.52;
-    this.gst  = 10;
+    this.gst = 10;
     this.details_01 = 'details 01';
     this.details_02 = 'details 02';
   }
@@ -149,8 +149,8 @@ class ReceiptData {
         break;
 
       case ReceiptDataType.total:
-      return total;
-      break;
+        return total;
+        break;
       case ReceiptDataType.details_01:
         return details_01;
         break;
