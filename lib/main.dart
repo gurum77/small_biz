@@ -1,3 +1,4 @@
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:small_biz/TableInputPage.dart';
 import 'PhotoInputPage.dart';
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       title: 'Small-Biz',
       theme: ThemeData(

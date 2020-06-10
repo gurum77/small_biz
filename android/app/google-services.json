@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "630512429744",
+    "firebase_url": "https://small-biz-6154c.firebaseio.com",
+    "project_id": "small-biz-6154c",
+    "storage_bucket": "small-biz-6154c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630512429744:android:a1645d56652599de68a975",
+        "android_client_info": {
+          "package_name": "com.example.small_biz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630512429744-59edflnpsdthamf6qpkigbkiq0lqnbso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEhnc0wRDq-BmVe8n0OHKHinxC3VhNuew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630512429744-59edflnpsdthamf6qpkigbkiq0lqnbso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

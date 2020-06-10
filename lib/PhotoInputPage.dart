@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +27,25 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
     final pickedFile = await picker.getImage(
         source: byCamera ? ImageSource.camera : ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile == null)
-        _image = null;
-      else
-        _image = File(pickedFile.path);
-    });
+    if (pickedFile == null)
+      _image = null;
+    else {
+      _image = File(pickedFile.path);
+      // 영수증 사진을 가져오면 이을 분석해서 영수증 데이타로 변환한다.
+      FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(_image);
+      TextRecognizer textReader = FirebaseVision.instance.cloudTextRecognizer();
+
+      VisionText texts = await textReader.processImage(visionImage);
+
+      for (TextBlock block in texts.blocks) {
+        for (TextLine line in block.lines) {
+          for (TextElement word in line.elements) {
+            print(word.text);
+          }
+        }
+      }
+      setState(() {});
+    }
   }
 
   void AddDataRow(List<DataRow> rows, ReceiptDataType type) {
