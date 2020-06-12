@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:small_biz/ReceiptData.dart';
+import 'package:small_biz/VisionTextParser.dart';
 
 class PhotoInputPage extends StatefulWidget {
   String title;
@@ -21,6 +22,7 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
   ReceiptData receiptData = ReceiptData();
   List<DataRow> rows = new List<DataRow>();
   File _image;
+  VisionText visionText;
   final picker = ImagePicker();
 
   Future getImage(bool byCamera) async {
@@ -35,12 +37,14 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
       FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(_image);
       TextRecognizer textReader = FirebaseVision.instance.cloudTextRecognizer();
 
-      VisionText texts = await textReader.processImage(visionImage);
-
-      for (TextBlock block in texts.blocks) {
+      visionText = await textReader.processImage(visionImage);
+      for (TextBlock block in visionText.blocks) {
         for (TextLine line in block.lines) {
+          print(line.text);
+
           for (TextElement word in line.elements) {
-            print(word.text);
+            // print(word.text);
+
           }
         }
       }
@@ -102,7 +106,9 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
           body: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('images/sample_receipt.jpg'),
+                      image: _image == null
+                          ? AssetImage('images/sample_receipt.jpg')
+                          : FileImage(_image),
                       fit: BoxFit.cover)),
               child: Column(
                 children: <Widget>[
@@ -114,7 +120,7 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
                       DataColumn(label: Text('Title')),
                       DataColumn(label: Text('Value'), numeric: true)
                     ], rows: this.rows),
-                  )
+                  ),
                 ],
               )),
           // floatingActionButton: FloatingActionButton(
