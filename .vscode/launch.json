@@ -5,7 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "program": "VisionTextPaserMain.dart",
             "name": "Flutter",
             "request": "launch",
             "type": "dart"
