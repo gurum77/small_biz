@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:small_biz/ReceiptData.dart';
+import 'package:small_biz/VisionTextManager.dart';
+import 'ReceiptTextLines.dart';
 
 class PhotoInputPage extends StatefulWidget {
   String title;
@@ -37,16 +39,24 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
       TextRecognizer textReader = FirebaseVision.instance.cloudTextRecognizer();
 
       visionText = await textReader.processImage(visionImage);
-      for (TextBlock block in visionText.blocks) {
-        // print(block.text);
-        for (TextLine line in block.lines) {
-          // print(line.text);
 
-          for (TextElement word in line.elements) {
-            print(word.text);
-          }
-        }
+      var visionTextManager = VisionTextManager();
+      var receiptTextLines = visionTextManager.findTextLinesByVisionText(visionText);
+      
+      for(var textLine in receiptTextLines.lines){
+        print(textLine.toString());
       }
+      
+      // for (TextBlock block in visionText.blocks) {
+      //   // print(block.text);
+      //   for (TextLine line in block.lines) {
+      //     // print(line.text);
+
+      //     for (TextElement word in line.elements) {
+      //       print(word.text);
+      //     }
+      //   }
+      // }
       setState(() {});
     }
   }

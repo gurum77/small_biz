@@ -1,9 +1,6 @@
-import 'dart:io';
 
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:small_biz/TableInputPage.dart';
-import 'package:small_biz/VisionTextParser.dart';
 import 'PhotoInputPage.dart';
 
 void main() {
