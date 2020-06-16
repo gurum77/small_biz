@@ -1,7 +1,6 @@
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'ReceiptTextLines.dart';
 
-
 // vision text 관리자
 // vision text를 파싱하기 적당하게 제어한다.
 class VisionTextManager {
@@ -9,7 +8,6 @@ class VisionTextManager {
 
   // vision text에서 정리된 textline을 리턴한다.
   ReceiptTextLines findTextLinesByVisionText(VisionText visionText) {
-
     var receipttextLines = new ReceiptTextLines();
 
     // 모든 element를 가져온다.
@@ -20,12 +18,6 @@ class VisionTextManager {
       var leftElement = pullLeftElement(elements);
       var textLine = new ReceiptTextLine();
       textLine.elements.add(leftElement);
-
-      if(leftElement.text.contains('Product'))
-      {
-       int i= 0;
-       i = 0; 
-      }
 
       // 가장 왼쪽부터 연결가능한 가장 가까운 오른쪽 element를 가져온다.
       while (true) {
@@ -80,27 +72,25 @@ class VisionTextManager {
 
   // elements 중에서 leftElement에 연결될 수 있는 가장 왼쪽의 것을 리턴한다.
   // 찾은 것은 list에서 제외한다.
-  TextElement pullConnectableElement(List<TextElement> elements, TextElement leftElement) {
-
+  TextElement pullConnectableElement(
+      List<TextElement> elements, TextElement leftElement) {
     TextElement connectElement;
     for (var ele in elements) {
-      if(leftElement.text.contains('Time') && ele.text.contains('PM'))
-      {
+      if (leftElement.text.contains('Time') && ele.text.contains('PM')) {
         int i = 0;
         i = 0;
       }
       // 연결이 안되면 통과
       if (!isConnectable(leftElement, ele)) continue;
-      
+
       // 연결되는 것 중에서 가장 왼쪽 것을 택한다.
-      if(connectElement == null || connectElement.boundingBox.left > ele.boundingBox.left)
-      {
-        connectElement  = ele;
+      if (connectElement == null ||
+          connectElement.boundingBox.left > ele.boundingBox.left) {
+        connectElement = ele;
       }
     }
 
-    if(connectElement != null)
-    {
+    if (connectElement != null) {
       elements.remove(connectElement);
     }
 
@@ -112,8 +102,9 @@ class VisionTextManager {
     if (leftElement == null || ele == null) return false;
 
     // 위아래 오차 범위 내에 들어야 함.
-    double diffY  = (leftElement.boundingBox.center.dy - ele.boundingBox.center.dy).abs();
-    
+    double diffY =
+        (leftElement.boundingBox.center.dy - ele.boundingBox.center.dy).abs();
+
     if ((leftElement.boundingBox.center.dy - ele.boundingBox.center.dy).abs() >
         _tol) return false;
 
