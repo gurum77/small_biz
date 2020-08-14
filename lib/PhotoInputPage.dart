@@ -41,12 +41,19 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
       visionText = await textReader.processImage(visionImage);
 
       var visionTextManager = VisionTextManager();
-      var receiptTextLines = visionTextManager.findTextLinesByVisionText(visionText);
-      
-      for(var textLine in receiptTextLines.lines){
-        print(textLine.toString());
+      var receiptTextLines =
+          visionTextManager.findTextLinesByVisionText(visionText);
+
+      rows.clear();
+      int num = 1;
+      for (var textLine in receiptTextLines.lines) {
+        rows.add(DataRow(cells: [
+          DataCell(Text(num.toString())),
+          DataCell(Text(textLine.toString()))
+        ]));
+        num++;
       }
-      
+
       // for (TextBlock block in visionText.blocks) {
       //   // print(block.text);
       //   for (TextLine line in block.lines) {
@@ -94,50 +101,76 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
     return MaterialApp(
         title: 'PhotoInput',
         home: Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-              onTap: _onItemTapped,
-              type: BottomNavigationBarType.fixed,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.skip_previous), title: Text('Prev.')),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.save), title: Text('Save')),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.skip_next), title: Text('Next')),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.space_bar), title: Text('')),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.add), title: Text('New')),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.photo), title: Text('Photo')),
-                // BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Add')),
-              ]),
-          body: Container(
+            bottomNavigationBar: BottomNavigationBar(
+                onTap: _onItemTapped,
+                type: BottomNavigationBarType.fixed,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.skip_previous), title: Text('Prev.')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.save), title: Text('Save')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.skip_next), title: Text('Next')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.space_bar), title: Text('')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.add), title: Text('New')),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.photo), title: Text('Photo')),
+                  // BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('Add')),
+                ]),
+            body: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: _image == null
                           ? AssetImage('images/sample_receipt.jpg')
                           : FileImage(_image),
                       fit: BoxFit.cover)),
-              child: Column(
+              child: Container(
+                margin: EdgeInsets.all(30),
+                padding: EdgeInsets.all(20),
+                  color: Color.fromARGB(240, 255, 255, 0), child: buildFutureBuilderListView()),
+            )
+
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: null,
+            //   child: Icon(Icons.add),
+            //   elevation: 20,
+            // ),
+            ));
+  }
+
+  FutureBuilder<List<DataRow>> buildFutureBuilderListView() {
+    return FutureBuilder(
+      future: getRows(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return CircularProgressIndicator();
+        } else {
+          return ListView.builder(
+            itemBuilder: (context, position) {
+            List<DataRow> rows = snapshot.data;
+            if (position < rows.length) {
+              DataRow dataRow = rows[position];
+              return Row(
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(50),
-                    padding: EdgeInsets.all(30),
-                    color: Color.fromARGB(200, 255, 255, 255),
-                    child: DataTable(columns: [
-                      DataColumn(label: Text('Title')),
-                      DataColumn(label: Text('Value'), numeric: true)
-                    ], rows: this.rows),
-                  ),
+                  Container(child: dataRow.cells[0].child),
+                  SizedBox(width: 10,),
+                  Container(child: dataRow.cells[1].child)
                 ],
-              )),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: null,
-          //   child: Icon(Icons.add),
-          //   elevation: 20,
-          // ),
-        ));
+              );
+            }
+          });
+        }
+      },
+    );
+  }
+
+  DataTable buildDataTable() {
+    return DataTable(columns: [
+      DataColumn(label: Text('Title')),
+      DataColumn(label: Text('Value'), numeric: true)
+    ], rows: this.rows);
   }
 
   void _onItemTapped(int value) {
@@ -148,5 +181,9 @@ class _PhotoInputPageState extends State<PhotoInputPage> {
       // gallery
       getImage(false);
     }
+  }
+
+  Future<List<DataRow>> getRows() async {
+    return rows;
   }
 }

@@ -1,5 +1,6 @@
 // receipt data 한줄에 대한 클래스 정의
 import 'package:flutter/material.dart';
+import 'package:small_biz/ReceiptTextLines.dart';
 
 enum Business { kchefs, kcleaners }
 
@@ -165,5 +166,10 @@ class ReceiptData {
         break;
       default:
     }
+  }
+
+  // receipt text line으로 receipt data를 채운다.
+  void setFromReceiptTextLines(ReceiptTextLines receiptTextLines) {
+   
   }
 }

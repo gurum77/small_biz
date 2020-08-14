@@ -1,4 +1,4 @@
-package com.example.small_biz
+package com.Byung.small_biz
 
 import io.flutter.embedding.android.FlutterActivity
 
